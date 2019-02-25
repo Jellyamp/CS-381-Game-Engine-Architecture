@@ -10,10 +10,12 @@
 
 #include <iostream>
 
+class Entity381;
+
 class Aspect
 {
 public:
-	Aspect();
+	Aspect(Entity381& ent);
 	virtual ~Aspect();
 	
 	/*
@@ -23,6 +25,9 @@ public:
 	 * 	@note This tick function is virtual because each Aspect might tick slightly differently.
 	 */
 	virtual void Tick(float dt);
+	
+protected:
+	Entity381* mEntity381;
 };
 
 

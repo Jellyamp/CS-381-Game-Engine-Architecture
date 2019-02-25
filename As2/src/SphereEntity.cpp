@@ -10,5 +10,6 @@
 SphereEntity::SphereEntity()
 {
 	std::cout << "New Sphere Entity!" << std::endl;
-	mAspects.push_back(new PhysicsAspect());
 }
+
+

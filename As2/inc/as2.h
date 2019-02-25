@@ -42,21 +42,18 @@ protected:
      * Helper functions to shorten code segments and increase readability.
      */
     void createGround();
+    void createEntities();
     void selectNextEntity();
     Ogre::SceneNode* createSceneNode(Ogre::String nodeName);
-    Ogre::Entity* createEntity(Ogre::String entityName);
     Ogre::Light* createLight(Ogre::String lightName);
+    Ogre::Entity* createEntity(Ogre::String entityName);
 
 private:
     bool processUnbufferedInput(const Ogre::FrameEvent& fe);
 
     EntityMgr mEntityMgr;
     
-    std::vector<Entity381*> m381Entities;	// A list of the Entity381 objects in the scene.
-    
     Entity381* mCurrentEntity381;			// The currently selected 381 entity.
-    
-    int mCurrentEntityIndex;				// The current entity index.
     
     Ogre::SceneNode* mCameraNode;			// A scene node pointer for the current camera object.
     Ogre::SceneNode* tempNode;
@@ -64,8 +61,8 @@ private:
     Ogre::Vector3 mHouseInitialPosition;	// The initial position of the sphere.
     Ogre::Vector3 mCameraPosition; 			// The current position of the camera.
     Ogre::Vector3 mDirection;				// The current direction vector for the current camera.
-    Ogre::Vector3 mCameraRotation;			// The current camera rotation.
     
+    float mCameraRotation;					// The current camera yaw.
     float mMove;							// The base velocity of the camera.
     float mSurfaceHeight; 					// The height of the plane along the axis that it was created on.
 };

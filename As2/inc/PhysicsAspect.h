@@ -13,7 +13,7 @@
 class PhysicsAspect : public Aspect
 {
 public:
-	PhysicsAspect();
+	PhysicsAspect(Entity381& ent);
 	virtual ~PhysicsAspect();
 	
 	/*

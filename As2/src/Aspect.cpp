@@ -7,10 +7,12 @@
 
 
 #include "Aspect.h"
+#include "Entity381.h"
 
-Aspect::Aspect()
+Aspect::Aspect(Entity381& ent)
 {
 	std::cout << "New Aspect!" << std::endl;
+	mEntity381 = &ent;
 }
 
 Aspect::~Aspect()

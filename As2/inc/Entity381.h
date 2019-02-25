@@ -12,7 +12,11 @@
 #include <vector>
 #include <iostream>
 #include <OgreEntity.h>
+#include <OgreSceneNode.h>
 #include "Aspect.h"
+#include "PhysicsAspect.h"
+#include "RenderableAspect.h"
+#include "RotatorAspect.h"
 
 enum Directions
 {
@@ -35,6 +39,9 @@ public:
 	
 	Ogre::Vector3 GetVelocity();
 	void Accelerate(Directions dir);
+	
+	Ogre::SceneNode*& GetSceneNode();
+	Ogre::Entity*& GetEntity();
 	
 	/*
 	 * 	@name Tick

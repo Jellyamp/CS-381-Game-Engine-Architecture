@@ -27,8 +27,7 @@ As2::As2(void)
 	mCameraNode = NULL;
 	mDirection = 0;
 	mCameraRotation = 0;
-	mMove = 100;
-	mCurrentEntityIndex = 0;
+	mMove = 300;
 	tempNode = NULL;
 }
 //---------------------------------------------------------------------------
@@ -49,7 +48,7 @@ void As2::createScene(void)
 	lightNode->attachObject(lt);
 	lightNode->setPosition(500, 500, 500);
 
-	tempNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("CamNode1", Ogre::Vector3(0, 100, 0));
+	tempNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("CamNode1", Ogre::Vector3(0, 500, 150));
 	tempNode->yaw(Ogre::Degree(90));
 
 	mCameraNode = tempNode;
@@ -57,7 +56,11 @@ void As2::createScene(void)
 	
 	createGround();
 	
-	mEntityMgr.CreateEntity();
+	mSceneMgr->setSkyBox(true, "Examples/MorningSkyBox");
+	
+	mEntityMgr.SetSceneMgr(mSceneMgr);
+	
+	createEntities();
 }
 
 void As2::createGround()
@@ -75,8 +78,40 @@ void As2::createGround()
     floorEntity->setMaterialName("Ocean2_Cg");
 }
 
+void As2::createEntities()
+{
+	int offset = 300;
+	for(int count = 0; count < 5; count++)
+	{
+		mEntityMgr.CreateEntityOfTypeAtPosition(CUBE_ENT, Ogre::Vector3(-100, 200, offset));
+		offset += 200;
+	}
+	offset = 300;
+	for(int count = 0; count < 5; count++)
+	{
+		mEntityMgr.CreateEntityOfTypeAtPosition(SPHERE_ENT, Ogre::Vector3(-500, 200, offset));
+		offset += 200;
+	}
+	
+	mCurrentEntity381 = NULL;
+	selectNextEntity();
+}
+
 void As2::selectNextEntity()
 {
+	if(mCurrentEntity381 != NULL)
+	{		
+		mCurrentEntity381->GetSceneNode()->showBoundingBox(false);
+	}
+	mCurrentEntity381 = mEntityMgr.GetNextEntity(mCurrentEntity381);
+	if(mCurrentEntity381 == NULL)
+	{
+		std::cerr << "mCurrentEntity381 is NULL!!!" << std::endl;
+	}
+	else
+	{		
+		mCurrentEntity381->GetSceneNode()->showBoundingBox(true);
+	}
 }
 
 /*
@@ -87,9 +122,6 @@ Ogre::SceneNode* As2::createSceneNode(Ogre::String nodeName)
 	return mSceneMgr->getRootSceneNode()->createChildSceneNode(nodeName);
 }
 
-/*
- * This function creates a new entity and returns a pointer to it.
- */
 Ogre::Entity* As2::createEntity(Ogre::String entityName)
 {
 	return mSceneMgr->createEntity(entityName);
@@ -109,6 +141,9 @@ Ogre::Light* As2::createLight(Ogre::String lightName)
 bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
 	mCameraNode->translate(mDirection * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+	mCameraNode->yaw(Ogre::Radian(Ogre::Degree(mCameraRotation * fe.timeSinceLastFrame)));
+	
+	mEntityMgr.Tick(fe.timeSinceLastFrame);
 	
 	return BaseApplication::frameRenderingQueued(fe);
 }
@@ -121,75 +156,80 @@ bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
 // Keyboard Key Pressed
 bool As2::keyPressed(const OIS::KeyEvent& ke)
 {
-	if(ke.key == OIS::KC_LSHIFT) // Extended shift input commands.
+	if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) && mKeyboard->isKeyDown(OIS::KC_A))
 	{
-		if(mKeyboard->isKeyDown(OIS::KC_A))
-		{
-			// Change camera yaw.
-		}
-		else if(mKeyboard->isKeyDown(OIS::KC_D))
-		{
-			// Change camera yaw.
-		}
+		mCameraRotation = mMove;
 	}
-	else	// Normal input commands.
+	if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) && mKeyboard->isKeyDown(OIS::KC_D))
 	{
-		switch (ke.key)
-		{
-		// QUIT PROGRAM
-		case OIS::KC_Q:
-		case OIS::KC_ESCAPE: 
-			mShutDown = true;
-			break;
-			
-		// CAMERA MOVE
-		case OIS::KC_UP:
-		case OIS::KC_W:
-			mDirection.z = -mMove;
-			break;
-		case OIS::KC_DOWN:
-		case OIS::KC_S:
-			mDirection.z = mMove;
-			break;
-		case OIS::KC_LEFT:
-		case OIS::KC_A:
+		mCameraRotation = -mMove;
+	}
+	switch (ke.key)
+	{
+	// QUIT PROGRAM
+	case OIS::KC_Q:
+	case OIS::KC_ESCAPE: 
+		mShutDown = true;
+		break;
+		
+	// CAMERA MOVE
+	case OIS::KC_UP:
+	case OIS::KC_W:
+		mDirection.z = -mMove;
+		break;
+	case OIS::KC_DOWN:
+	case OIS::KC_S:
+		mDirection.z = mMove;
+		break;
+	case OIS::KC_LEFT:
+	case OIS::KC_A:
+		if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) == false)
+		{				
 			mDirection.x = -mMove;
-			break;
-		case OIS::KC_RIGHT:
-		case OIS::KC_D:
-			mDirection.x = mMove;
-			break;
-		case OIS::KC_F:
-			mDirection.y = -mMove;
-			break;
-		case OIS::KC_E:
-			mDirection.y = mMove;
-			break;
-		 
-		// Current Entity Velocity
-		case OIS::KC_NUMPAD2:
-			mCurrentEntity381->Accelerate(ZPLUS);
-			break;
-		case OIS::KC_NUMPAD8:
-			mCurrentEntity381->Accelerate(ZMINUS);
-			break;
-		case OIS::KC_NUMPAD4:
-			mCurrentEntity381->Accelerate(XPLUS);
-			break;
-		case OIS::KC_NUMPAD6:
-			mCurrentEntity381->Accelerate(XMINUS);
-			break;
-		case OIS::KC_PGUP:
-			mCurrentEntity381->Accelerate(YPLUS);
-			break;
-		case OIS::KC_PGDOWN:
-			mCurrentEntity381->Accelerate(YMINUS);
-			break;
-		default:
-			break;
 		}
-	}
-	
+		break;
+	case OIS::KC_RIGHT:
+	case OIS::KC_D:
+		if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) == false)
+		{				
+			mDirection.x = mMove;
+		}
+		mDirection.x = mMove;
+		break;
+	case OIS::KC_F:
+		mDirection.y = -mMove;
+		break;
+	case OIS::KC_E:
+		mDirection.y = mMove;
+		break;
+	 
+	// Current Entity Velocity
+	case OIS::KC_NUMPAD2:
+		mCurrentEntity381->Accelerate(XPLUS);
+		break;
+	case OIS::KC_NUMPAD8:
+		mCurrentEntity381->Accelerate(XMINUS);
+		break;
+	case OIS::KC_NUMPAD4:
+		mCurrentEntity381->Accelerate(ZPLUS);
+		break;
+	case OIS::KC_NUMPAD6:
+		mCurrentEntity381->Accelerate(ZMINUS);
+		break;
+	case OIS::KC_PGUP:
+		mCurrentEntity381->Accelerate(YPLUS);
+		break;
+	case OIS::KC_PGDOWN:
+		mCurrentEntity381->Accelerate(YMINUS);
+		break;
+		
+	case OIS::KC_TAB:
+		selectNextEntity();
+		break;
+		
+	default:
+		break;
+	}	
 	return true; 
 }
 
@@ -199,6 +239,7 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
 	switch (ke.key)
 	{
 	case OIS::KC_LSHIFT:
+		mCameraRotation = 0;
 		break;
 		
 	case OIS::KC_UP:
@@ -213,11 +254,13 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
 
 	case OIS::KC_LEFT:
 	case OIS::KC_A:
+		mCameraRotation = 0;
 		mDirection.x = 0;
 		break;
 
 	case OIS::KC_RIGHT:
 	case OIS::KC_D:
+		mCameraRotation = 0;
 		mDirection.x = 0;
 		break;
 
@@ -227,7 +270,7 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
 		break;
 
 	case OIS::KC_PGUP:
-	case OIS::KC_Q:
+	case OIS::KC_F:
 		mDirection.y = 0;
 		break;
 
