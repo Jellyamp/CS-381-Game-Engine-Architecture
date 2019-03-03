@@ -3,6 +3,7 @@
  *
  *  Created on: Mar 2, 2019
  *      Author: Alexander Pasinski
+ *      Contributor: Sushil J Louis
  */
 
 #ifndef __As2_h_
@@ -15,32 +16,32 @@
 class As3 : public BaseApplication
 {
 public:
-  As3();
-  virtual ~As3();
-  virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
+    As3();
+    virtual ~As3();
 
-  void MakeGround();
-  void MakeSky();
-  void MakeFog();
-  void MakeEnts();
+    virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
 
-  void UpdateCamera(const Ogre::FrameEvent& fe);
-  void UpdateVelocityAndSelection(const Ogre::FrameEvent& fe);
+    void MakeGround();
+    void MakeSky();
+    void MakeFog();
+    void MakeEnts();
 
+    void UpdateCamera(const Ogre::FrameEvent& fe);
+    void UpdateVelocityAndSelection(const Ogre::FrameEvent& fe);
 
-  EntityMgr *entityMgr;
-  //------------------------------------------------------------
+    EntityMgr *entityMgr;
 
-  Ogre::SceneNode* cameraNode;
+    Ogre::SceneNode* cameraNode;
 
-  float yaw;
-  float deltaVelocity;
-  float keyboardTimer;
-  float surfaceHeight;
-  const static float keyTime;
+    float yaw;
+    float acceleration;
+    float keyboardTimer;
+    float surfaceHeight;
+
+    const static float keyTime;
 
 protected:
-  virtual void createScene();
+    virtual void createScene();
 
 };
 
