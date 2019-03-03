@@ -18,16 +18,16 @@ http://www.ogre3d.org/wiki/
 #include "../inc/TutorialApplication.h"
 
 //---------------------------------------------------------------------------
-As2::As2(void)
+As3::As3(void)
 {
 }
 //---------------------------------------------------------------------------
-As2::~As2(void)
+As3::~As3(void)
 {
 }
 
 //---------------------------------------------------------------------------
-void As2::createScene(void)
+void As3::createScene(void)
 {
 
 }
@@ -49,7 +49,7 @@ extern "C" {
 #endif
     {
         // Create application object
-        As2 app;
+        As3 app;
 
         try {
             app.go();

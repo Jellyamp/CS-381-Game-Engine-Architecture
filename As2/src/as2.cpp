@@ -18,7 +18,7 @@ http://www.ogre3d.org/wiki/
 #include <as2.h>
 
 //---------------------------------------------------------------------------
-As2::As2(void)
+As3::As3(void)
 {
 	mSurfaceHeight = 0;
 	mCurrentEntity381 = NULL;
@@ -33,12 +33,12 @@ As2::As2(void)
 	tempNode = NULL;
 }
 //---------------------------------------------------------------------------
-As2::~As2(void)
+As3::~As3(void)
 {
 }
 
 //---------------------------------------------------------------------------
-void As2::createScene(void)
+void As3::createScene(void)
 {
 	// Lighting Setup
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
@@ -65,7 +65,7 @@ void As2::createScene(void)
 	createEntities();
 }
 
-void As2::createGround()
+void As3::createGround()
 {
     // Plane entity
     Ogre::Plane plane(Ogre::Vector3::UNIT_Y, mSurfaceHeight);
@@ -80,7 +80,7 @@ void As2::createGround()
     floorEntity->setMaterialName("Ocean2_Cg");
 }
 
-void As2::createEntities()
+void As3::createEntities()
 {
 	int offset = 300;
 	for(int count = 0; count < 5; count++)
@@ -99,7 +99,7 @@ void As2::createEntities()
 	selectNextEntity();
 }
 
-void As2::selectNextEntity()
+void As3::selectNextEntity()
 {
 	if(mCurrentEntity381 != NULL)
 	{		
@@ -119,12 +119,12 @@ void As2::selectNextEntity()
 /*
  * This function creates a new scene node and returns a pointer to it as well as setting a lookup name for later.
  */
-Ogre::SceneNode* As2::createSceneNode(Ogre::String nodeName)
+Ogre::SceneNode* As3::createSceneNode(Ogre::String nodeName)
 {
 	return mSceneMgr->getRootSceneNode()->createChildSceneNode(nodeName);
 }
 
-Ogre::Entity* As2::createEntity(Ogre::String entityName)
+Ogre::Entity* As3::createEntity(Ogre::String entityName)
 {
 	return mSceneMgr->createEntity(entityName);
 }
@@ -132,7 +132,7 @@ Ogre::Entity* As2::createEntity(Ogre::String entityName)
 /*
  * This function creates a new light and returns a pointer to it.
  */
-Ogre::Light* As2::createLight(Ogre::String lightName)
+Ogre::Light* As3::createLight(Ogre::String lightName)
 {
 	return mSceneMgr->createLight(lightName);
 }
@@ -140,7 +140,7 @@ Ogre::Light* As2::createLight(Ogre::String lightName)
 /*
  * This function runs just before the output of every frame.
  */
-bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
+bool As3::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
 	mCameraNode->translate(mDirection * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 	mCameraNode->yaw(Ogre::Radian(Ogre::Degree(mCameraYaw * fe.timeSinceLastFrame)));
@@ -158,7 +158,7 @@ bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
  **********************/
 
 // Keyboard Key Pressed
-bool As2::keyPressed(const OIS::KeyEvent& ke)
+bool As3::keyPressed(const OIS::KeyEvent& ke)
 {
 	if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) && mKeyboard->isKeyDown(OIS::KC_A))
 	{
@@ -250,7 +250,7 @@ bool As2::keyPressed(const OIS::KeyEvent& ke)
 }
 
 // Keyboard Key Released
-bool As2::keyReleased(const OIS::KeyEvent& ke) 
+bool As3::keyReleased(const OIS::KeyEvent& ke) 
 { 
 	switch (ke.key)
 	{
@@ -315,20 +315,20 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
  **********************/
 
 // Mouse Moved
-bool As2::mouseMoved(const OIS::MouseEvent& me) 
+bool As3::mouseMoved(const OIS::MouseEvent& me) 
 { 
 	return true; 
 }
 
 // Mouse Pressed
-bool As2::mousePressed(
+bool As3::mousePressed(
   const OIS::MouseEvent& me, OIS::MouseButtonID id) 
 { 
 	return true; 
 }
 
 // Mouse Released
-bool As2::mouseReleased(
+bool As3::mouseReleased(
   const OIS::MouseEvent& me, OIS::MouseButtonID id) 
 { 
 	return true; 
@@ -352,7 +352,7 @@ extern "C" {
 #endif
     {
         // Create application object
-        As2 app;
+        As3 app;
 
         try {
             app.go();

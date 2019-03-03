@@ -18,7 +18,7 @@ http://www.ogre3d.org/wiki/
 #include "../inc/TutorialApplication.h"
 
 //---------------------------------------------------------------------------
-As2::As2(void)
+As3::As3(void)
 {
 	mSurfaceHeight = 0;
 	mHouseNode = NULL;
@@ -29,12 +29,12 @@ As2::As2(void)
 	mMove = 100;
 }
 //---------------------------------------------------------------------------
-As2::~As2(void)
+As3::~As3(void)
 {
 }
 
 //---------------------------------------------------------------------------
-void As2::createScene(void)
+void As3::createScene(void)
 {
 	Ogre::SceneNode* tempNode = NULL; // Used for temporary management of scene nodes.
 	
@@ -67,7 +67,7 @@ void As2::createScene(void)
 /*
  * This function creates a new scene node and returns a pointer to it as well as setting a lookup name for later.
  */
-Ogre::SceneNode* As2::createSceneNode(Ogre::String nodeName)
+Ogre::SceneNode* As3::createSceneNode(Ogre::String nodeName)
 {
 	return mSceneMgr->getRootSceneNode()->createChildSceneNode(nodeName);
 }
@@ -75,7 +75,7 @@ Ogre::SceneNode* As2::createSceneNode(Ogre::String nodeName)
 /*
  * This function creates a new entity and returns a pointer to it.
  */
-Ogre::Entity* As2::createEntity(Ogre::String entityName)
+Ogre::Entity* As3::createEntity(Ogre::String entityName)
 {
 	return mSceneMgr->createEntity(entityName);
 }
@@ -83,7 +83,7 @@ Ogre::Entity* As2::createEntity(Ogre::String entityName)
 /*
  * This function creates a new light and returns a pointer to it.
  */
-Ogre::Light* As2::createLight(Ogre::String lightName)
+Ogre::Light* As3::createLight(Ogre::String lightName)
 {
 	return mSceneMgr->createLight(lightName);
 }
@@ -91,7 +91,7 @@ Ogre::Light* As2::createLight(Ogre::String lightName)
 /*
  * This function runs just before the output of every frame.
  */
-bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
+bool As3::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
 	mCameraNode->translate(mDirection * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
 	
@@ -104,7 +104,7 @@ bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
  **********************/
 
 // Keyboard Key Pressed
-bool As2::keyPressed(const OIS::KeyEvent& ke) 
+bool As3::keyPressed(const OIS::KeyEvent& ke) 
 { 
 	switch (ke.key)
 	{
@@ -160,7 +160,7 @@ bool As2::keyPressed(const OIS::KeyEvent& ke)
 }
 
 // Keyboard Key Released
-bool As2::keyReleased(const OIS::KeyEvent& ke) 
+bool As3::keyReleased(const OIS::KeyEvent& ke) 
 { 
 	switch (ke.key)
 	{
@@ -206,20 +206,20 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
  **********************/
 
 // Mouse Moved
-bool As2::mouseMoved(const OIS::MouseEvent& me) 
+bool As3::mouseMoved(const OIS::MouseEvent& me) 
 { 
 	return true; 
 }
 
 // Mouse Pressed
-bool As2::mousePressed(
+bool As3::mousePressed(
   const OIS::MouseEvent& me, OIS::MouseButtonID id) 
 { 
 	return true; 
 }
 
 // Mouse Released
-bool As2::mouseReleased(
+bool As3::mouseReleased(
   const OIS::MouseEvent& me, OIS::MouseButtonID id) 
 { 
 	return true; 
@@ -243,7 +243,7 @@ extern "C" {
 #endif
     {
         // Create application object
-        As2 app;
+        As3 app;
 
         try {
             app.go();

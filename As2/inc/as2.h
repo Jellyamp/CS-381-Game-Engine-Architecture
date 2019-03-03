@@ -23,11 +23,11 @@ http://www.ogre3d.org/wiki/
 
 //---------------------------------------------------------------------------
 
-class As2 : public BaseApplication
+class As3 : public BaseApplication
 {
 public:
-    As2(void);
-    virtual ~As2(void);
+    As3(void);
+    virtual ~As3(void);
 
 protected:
     virtual void createScene(void);

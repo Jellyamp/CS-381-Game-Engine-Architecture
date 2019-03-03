@@ -18,7 +18,7 @@ http://www.ogre3d.org/wiki/
 #include "../inc/TutorialApplication.h"
 
 //---------------------------------------------------------------------------
-As2::As2(void)
+As3::As3(void)
 {
 	mSphereVelocity = 0;
 	mSurfaceHeight = 0;
@@ -29,12 +29,12 @@ As2::As2(void)
 	mBaseCameraVelocity = 0.2;
 }
 //---------------------------------------------------------------------------
-As2::~As2(void)
+As3::~As3(void)
 {
 }
 
 //---------------------------------------------------------------------------
-void As2::createScene(void)
+void As3::createScene(void)
 {
 	// Lighting Setup
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
@@ -72,7 +72,7 @@ void As2::createScene(void)
 /*
  * This function creates a new scene node and returns a pointer to it as well as setting a lookup name for later.
  */
-Ogre::SceneNode* As2::createSceneNode(Ogre::String nodeName)
+Ogre::SceneNode* As3::createSceneNode(Ogre::String nodeName)
 {
 	return mSceneMgr->getRootSceneNode()->createChildSceneNode(nodeName);
 }
@@ -80,7 +80,7 @@ Ogre::SceneNode* As2::createSceneNode(Ogre::String nodeName)
 /*
  * This function creates a new entity and returns a pointer to it.
  */
-Ogre::Entity* As2::createEntity(Ogre::String entityName)
+Ogre::Entity* As3::createEntity(Ogre::String entityName)
 {
 	return mSceneMgr->createEntity(entityName);
 }
@@ -88,12 +88,12 @@ Ogre::Entity* As2::createEntity(Ogre::String entityName)
 /*
  * This function creates a new light and returns a pointer to it.
  */
-Ogre::Light* As2::createLight(Ogre::String lightName)
+Ogre::Light* As3::createLight(Ogre::String lightName)
 {
 	return mSceneMgr->createLight(lightName);
 }
 
-bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
+bool As3::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
 	if(!processUnbufferedInput(fe))
 	{
@@ -108,7 +108,7 @@ bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
 	return BaseApplication::frameRenderingQueued(fe);
 }
 
-bool As2::processUnbufferedInput(const Ogre::FrameEvent& fe)
+bool As3::processUnbufferedInput(const Ogre::FrameEvent& fe)
 {
 	if(mKeyboard->isKeyDown(OIS::KC_SPACE)) // Reset sphere velocity to 0 in all directions.
 	{
@@ -189,7 +189,7 @@ extern "C" {
 #endif
     {
         // Create application object
-        As2 app;
+        As3 app;
 
         try {
             app.go();

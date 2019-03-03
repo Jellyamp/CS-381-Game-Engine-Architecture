@@ -1,8 +1,8 @@
 /*
- * As2.h
+ * As3.h
  *
- *  Created on: Jan 24, 2017
- *      Author: sushil
+ *  Created on: Mar 2, 2019
+ *      Author: Alexander Pasinski
  */
 
 #ifndef __As2_h_
@@ -12,11 +12,11 @@
 #include "EntityMgr.h"
 #include "Types381.h"
 
-class As2 : public BaseApplication
+class As3 : public BaseApplication
 {
 public:
-  As2();
-  virtual ~As2();
+  As3();
+  virtual ~As3();
   virtual bool frameRenderingQueued(const Ogre::FrameEvent& fe);
 
   void MakeGround();

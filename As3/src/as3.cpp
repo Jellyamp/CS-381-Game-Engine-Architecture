@@ -1,16 +1,17 @@
 //============================================================================
-// Name        : As2.cpp
-// Author      : Sushil J Louis
+// Name        : As3.cpp
+// Author	   : Alexander Pasinski
+// Contributor : Sushil J Louis
 // Version     :
 // Copyright   : All rights reserved
 // Description : Assignment 1
 //============================================================================
 
-#include "as2.h"
+#include <as3.h>
 
-const float As2::keyTime = 0.1f;
+const float As3::keyTime = 0.1f;
 
-As2::As2(void)
+As3::As3(void)
 {
 	deltaVelocity = 50.0f;
 	yaw = 0.0f;
@@ -20,11 +21,11 @@ As2::As2(void)
 	surfaceHeight = 0;
 }
 
-As2::~As2(void)
+As3::~As3(void)
 {
 }
 
-void As2::createScene(void)
+void As3::createScene(void)
 {
   mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 
@@ -34,7 +35,6 @@ void As2::createScene(void)
   light->setPosition(20.0, 80.0, 50.0);
 
   // a fixed point in the ocean so you can see relative motion
-
   Ogre::Entity* ogreEntityFixed = mSceneMgr->createEntity("robot.mesh");
   Ogre::SceneNode* sceneNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0, 100, -200));
   sceneNode->attachObject(ogreEntityFixed);
@@ -53,7 +53,7 @@ void As2::createScene(void)
   entityMgr->SelectNextEntity();
 }
 
-void As2::MakeEnts(){
+void As3::MakeEnts(){
 
 	Ogre::Vector3 pos = Ogre::Vector3(0, 0, 0);
 	for(int i = 0; i < 5; i++){
@@ -68,7 +68,7 @@ void As2::MakeEnts(){
 	}
 }
 
-void As2::UpdateCamera(const Ogre::FrameEvent& fe){
+void As3::UpdateCamera(const Ogre::FrameEvent& fe){
 	float move = 400.0f;
 	float rotate = 0.1f;
 
@@ -106,7 +106,7 @@ void As2::UpdateCamera(const Ogre::FrameEvent& fe){
 
 }
 
-bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe){
+bool As3::frameRenderingQueued(const Ogre::FrameEvent& fe){
 
 	mKeyboard->capture();
 	if(mKeyboard->isKeyDown(OIS::KC_Q) || mKeyboard->isKeyDown(OIS::KC_ESCAPE)){
@@ -125,7 +125,7 @@ bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe){
 }
 
 
-void As2::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe){
+void As3::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe){
 	keyboardTimer -= fe.timeSinceLastEvent;
 	
 	if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD8)){
@@ -164,7 +164,7 @@ void As2::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe){
 	}
 }
 
-void As2::MakeGround(){
+void As3::MakeGround(){
 
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, surfaceHeight);
 
@@ -186,11 +186,11 @@ void As2::MakeGround(){
 	  //groundEntity->setMaterialName("NavyCg");
 }
 
-void As2::MakeSky(){
+void As3::MakeSky(){
 	mSceneMgr->setSkyBox(true, "Examples/MorningSkyBox");
 }
 
-void As2::MakeFog(){
+void As3::MakeFog(){
 	Ogre::ColourValue fadeColour(0.2, 0.2, 0.2);
 	mWindow->getViewport(0)->setBackgroundColour(fadeColour);
 	mSceneMgr->setFog(Ogre::FOG_LINEAR, fadeColour, 0, 600, 900);
@@ -213,7 +213,7 @@ extern "C" {
 #endif
     {
 	// Create application object
-	As2 app;
+	As3 app;
 
 	try {
 	    app.go();
