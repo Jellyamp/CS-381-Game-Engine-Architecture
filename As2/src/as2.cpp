@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-Filename:    TutorialApplication.cpp
+Filename:    as2.cpp
 -----------------------------------------------------------------------------
 
 This source file is part of the
@@ -26,7 +26,9 @@ As2::As2(void)
 	mCameraPosition = 0;
 	mCameraNode = NULL;
 	mDirection = 0;
-	mCameraRotation = 0;
+	mCameraYaw = 0;
+	mCameraPitch = 0;
+	mCameraRoll = 0;
 	mMove = 300;
 	tempNode = NULL;
 }
@@ -141,7 +143,9 @@ Ogre::Light* As2::createLight(Ogre::String lightName)
 bool As2::frameRenderingQueued(const Ogre::FrameEvent& fe)
 {
 	mCameraNode->translate(mDirection * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
-	mCameraNode->yaw(Ogre::Radian(Ogre::Degree(mCameraRotation * fe.timeSinceLastFrame)));
+	mCameraNode->yaw(Ogre::Radian(Ogre::Degree(mCameraYaw * fe.timeSinceLastFrame)));
+	mCameraNode->pitch(Ogre::Radian(Ogre::Degree(mCameraPitch * fe.timeSinceLastFrame)));
+	mCameraNode->roll(Ogre::Radian(Ogre::Degree(mCameraRoll* fe.timeSinceLastFrame)));
 	
 	mEntityMgr.Tick(fe.timeSinceLastFrame);
 	
@@ -158,11 +162,11 @@ bool As2::keyPressed(const OIS::KeyEvent& ke)
 {
 	if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) && mKeyboard->isKeyDown(OIS::KC_A))
 	{
-		mCameraRotation = mMove;
+		mCameraYaw = mMove;
 	}
 	if(mKeyboard->isKeyDown(OIS::KC_LSHIFT) && mKeyboard->isKeyDown(OIS::KC_D))
 	{
-		mCameraRotation = -mMove;
+		mCameraYaw = -mMove;
 	}
 	switch (ke.key)
 	{
@@ -195,6 +199,18 @@ bool As2::keyPressed(const OIS::KeyEvent& ke)
 			mDirection.x = mMove;
 		}
 		mDirection.x = mMove;
+		break;
+	case OIS::KC_Z:
+		mCameraPitch = mMove;
+		break;
+	case OIS::KC_X:
+		mCameraPitch = -mMove;
+		break;
+	case OIS::KC_C:
+		mCameraRoll = mMove;
+		break;
+	case OIS::KC_V:
+		mCameraRoll = -mMove;
 		break;
 	case OIS::KC_F:
 		mDirection.y = -mMove;
@@ -239,7 +255,20 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
 	switch (ke.key)
 	{
 	case OIS::KC_LSHIFT:
-		mCameraRotation = 0;
+		mCameraYaw = 0;
+		break;
+		
+	case OIS::KC_Z:
+		mCameraPitch = 0;
+		break;
+	case OIS::KC_X:
+		mCameraPitch = 0;
+		break;
+	case OIS::KC_C:
+		mCameraRoll = 0;
+		break;
+	case OIS::KC_V:
+		mCameraRoll = 0;
 		break;
 		
 	case OIS::KC_UP:
@@ -254,13 +283,13 @@ bool As2::keyReleased(const OIS::KeyEvent& ke)
 
 	case OIS::KC_LEFT:
 	case OIS::KC_A:
-		mCameraRotation = 0;
+		mCameraYaw = 0;
 		mDirection.x = 0;
 		break;
 
 	case OIS::KC_RIGHT:
 	case OIS::KC_D:
-		mCameraRotation = 0;
+		mCameraYaw = 0;
 		mDirection.x = 0;
 		break;
 

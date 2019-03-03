@@ -1,6 +1,6 @@
 /*
 -----------------------------------------------------------------------------
-Filename:    TutorialApplication.h
+Filename:    as2.h
 -----------------------------------------------------------------------------
 
 This source file is part of the
@@ -15,8 +15,8 @@ http://www.ogre3d.org/wiki/
 -----------------------------------------------------------------------------
 */
 
-#ifndef __TutorialApplication_h_
-#define __TutorialApplication_h_
+#ifndef __AS2_h_
+#define __AS2_h_
 
 #include "EntityMgr.h"
 #include "BaseApplication.h"
@@ -62,13 +62,15 @@ private:
     Ogre::Vector3 mCameraPosition; 			// The current position of the camera.
     Ogre::Vector3 mDirection;				// The current direction vector for the current camera.
     
-    float mCameraRotation;					// The current camera yaw.
+    float mCameraYaw;					// The current camera yaw.
+    float mCameraPitch;
+    float mCameraRoll;
     float mMove;							// The base velocity of the camera.
     float mSurfaceHeight; 					// The height of the plane along the axis that it was created on.
 };
 
 //---------------------------------------------------------------------------
 
-#endif // #ifndef __TutorialApplication_h_
+#endif // #ifndef __AS2_h_
 
 //---------------------------------------------------------------------------
