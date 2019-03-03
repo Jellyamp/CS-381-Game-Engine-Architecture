@@ -154,7 +154,7 @@ void As3::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe)
             entityMgr->selectedEntity->desiredSpeed = entityMgr->selectedEntity->minSpeed;
         }
     }
-    if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD4))
+    if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD6))
     {
         keyboardTimer = keyTime;
         
@@ -163,10 +163,10 @@ void As3::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe)
         // Keep heading within 0 to 360 degrees.
         if(entityMgr->selectedEntity->desiredHeading < 0)
         {
-            entityMgr->selectedEntity->desiredHeading = 360 - entityMgr->selectedEntity->desiredHeading;
+            entityMgr->selectedEntity->desiredHeading = 360 - Ogre::Math::Abs(entityMgr->selectedEntity->desiredHeading);
         }
     }
-    if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD6))
+    if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD4))
     {
         keyboardTimer = keyTime;
 

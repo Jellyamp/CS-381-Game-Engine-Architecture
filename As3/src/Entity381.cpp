@@ -27,6 +27,7 @@ Entity381::Entity381(Ogre::SceneManager* sceneMgr, std::string meshfname,
     maxSpeed = 0;
     speed = 0;
     heading = 0;
+    previousHeading = 0;
     desiredSpeed = 0;
     desiredHeading = 0;
     acceleration = 0;
@@ -70,7 +71,7 @@ Destroyer::Destroyer(Ogre::SceneManager * sm, std::string meshfname,
         : Entity381(sm, meshfname, pos, ident)
 {
     acceleration = 50.0f;
-    turningRate = 10.0f;
+    turningRate = 2.0f;
     maxSpeed = 500.0f;
 }
 
@@ -86,7 +87,7 @@ Carrier::Carrier(Ogre::SceneManager * sm, std::string meshfname,
         : Entity381(sm, meshfname, pos, ident)
 {
     acceleration = 40.0f;
-    turningRate = 20.0f;
+    turningRate = 2.0f;
     maxSpeed = 400.0f;
 }
 Carrier::~Carrier()
@@ -101,7 +102,7 @@ Speedboat::Speedboat(Ogre::SceneManager * sm, std::string meshfname,
         : Entity381(sm, meshfname, pos, ident)
 {
     acceleration = 60.0f;
-    turningRate = 60.0f;
+    turningRate = 5.0f;
     maxSpeed = 300.0f;
 }
 
@@ -117,7 +118,7 @@ Frigate::Frigate(Ogre::SceneManager * sm, std::string meshfname,
         : Entity381(sm, meshfname, pos, ident)
 {
     acceleration = 30.0f;
-    turningRate = 30.0f;
+    turningRate = 5.0f;
     maxSpeed = 150.0f;
 }
 
@@ -133,7 +134,7 @@ Alien::Alien(Ogre::SceneManager * sm, std::string meshfname, Ogre::Vector3 pos,
         : Entity381(sm, meshfname, pos, ident)
 {
     acceleration = 15.0f;
-    turningRate = 40.0f;
+    turningRate = 9.0f;
     maxSpeed = 75.0f;
 }
 

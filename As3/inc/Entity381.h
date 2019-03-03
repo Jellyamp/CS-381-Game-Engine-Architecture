@@ -29,6 +29,7 @@ public:
     float maxSpeed;
     float speed;
     float heading;
+    float previousHeading;
     float desiredSpeed;
     float desiredHeading;
     float acceleration;

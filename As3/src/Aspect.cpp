@@ -74,14 +74,12 @@ void Physics::Tick(float dt)
         
         if(entity->heading < 0)
         {
-            entity->heading = 360 - entity->heading;
+            entity->heading = 360 - Ogre::Math::Abs(entity->heading);
         }
     }
     
-    entity->velocity.x = entity->speed * Ogre::Math::Sin(Ogre::Math::DegreesToRadians(entity->heading));
-    entity->velocity.y = entity->speed * Ogre::Math::Cos(Ogre::Math::DegreesToRadians(entity->heading));
-    
-    
+    entity->velocity.z = entity->speed * -1.0f * Ogre::Math::Sin(Ogre::Math::DegreesToRadians(entity->heading));
+    entity->velocity.x = entity->speed * Ogre::Math::Cos(Ogre::Math::DegreesToRadians(entity->heading));
     
     entity->position = entity->position + entity->velocity * dt; //entity381's position will now change every frame (tick)
 }
@@ -101,12 +99,16 @@ Renderable::~Renderable()
 
 void Renderable::Tick(float dt)
 {
-//do something;
-    entity->sceneNode->setPosition(entity->position); //now ogre should render the sceneNode at the new position...
-    //bounding boxes are rendered so...
+    entity->sceneNode->setPosition(entity->position);
+    entity->sceneNode->yaw(Ogre::Radian(Ogre::Degree(entity->heading - entity->previousHeading)));
+    entity->previousHeading = entity->heading;
+    
     if(entity->isSelected)
+    {
         entity->sceneNode->showBoundingBox(true);
+    }
     else
-        entity->sceneNode->showBoundingBox(false); //or we could do this in the entity mgr every time tab is pressed....
-
+    {
+        entity->sceneNode->showBoundingBox(false);
+    }
 }
