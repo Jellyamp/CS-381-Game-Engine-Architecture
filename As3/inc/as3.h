@@ -28,13 +28,18 @@ public:
 
     void UpdateCamera(const Ogre::FrameEvent& fe);
     void UpdateVelocityAndSelection(const Ogre::FrameEvent& fe);
+    
+    virtual bool keyReleased(const OIS::KeyEvent& ke);
 
     EntityMgr *entityMgr;
 
     Ogre::SceneNode* cameraNode;
 
-    float yaw;
-    float acceleration;
+    bool tabAvailable;
+    
+    float cameraYawWeight;
+    float cameraPitchWeight;
+    float cameraRollWeight;
     float keyboardTimer;
     float surfaceHeight;
 

@@ -58,7 +58,16 @@ void Physics::Tick(float dt)
         }
     }
     
+    if(entity->heading < entity->desiredHeading)
+    {
+        entity->heading += entity->turningRate;
+    }
+    else if(entity->heading > entity->desiredHeading)
+    {
+        entity->heading -= entity->turningRate;
+    }
     
+    /*
     if(entity->heading < entity->desiredHeading)
     {
         entity->heading += entity->turningRate;
@@ -77,6 +86,7 @@ void Physics::Tick(float dt)
             entity->heading = 360 - Ogre::Math::Abs(entity->heading);
         }
     }
+    */
     
     entity->velocity.z = entity->speed * -1.0f * Ogre::Math::Sin(Ogre::Math::DegreesToRadians(entity->heading));
     entity->velocity.x = entity->speed * Ogre::Math::Cos(Ogre::Math::DegreesToRadians(entity->heading));

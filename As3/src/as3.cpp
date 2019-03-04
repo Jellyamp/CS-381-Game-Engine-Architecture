@@ -4,21 +4,24 @@
 // Contributor : Sushil J Louis
 // Version     :
 // Copyright   : All rights reserved
-// Description : Assignment 1
+// Description : Assignment 3
 //============================================================================
 
 #include <as3.h>
 
-const float As3::keyTime = 0.1f;
+//const float As3::keyTime = 0.07f;
+const float As3::keyTime = 0.05f;
 
 As3::As3(void)
 {
-    acceleration = 50.0f;
-    yaw = 0.0f;
+    cameraYawWeight = 0.04f;
+    cameraPitchWeight = 0.04f;
+    cameraRollWeight = 0.04f;
     keyboardTimer = keyTime;
     cameraNode = 0;
     entityMgr = 0;
     surfaceHeight = 0;
+    tabAvailable = true;
 }
 
 As3::~As3(void)
@@ -70,36 +73,81 @@ void As3::MakeEnts()
 void As3::UpdateCamera(const Ogre::FrameEvent& fe)
 {
     float move = 400.0f;
-    float rotate = 0.1f;
 
     Ogre::Vector3 dirVec = Ogre::Vector3::ZERO;
-
-    if(mKeyboard->isKeyDown(OIS::KC_W))
-        dirVec.z -= move;
-
-    if(mKeyboard->isKeyDown(OIS::KC_S))
-        dirVec.z += move;
-
+    
+    // Camera up/down/roll controls.
     if(mKeyboard->isKeyDown(OIS::KC_E))
-        dirVec.y += move;
-
+    {
+        if(mKeyboard->isKeyDown(OIS::KC_LSHIFT))
+        {
+            cameraNode->roll(Ogre::Degree(5 * cameraRollWeight));            
+        }
+        else
+        {
+            dirVec.y += move;            
+        }
+    }
     if(mKeyboard->isKeyDown(OIS::KC_F))
-        dirVec.y -= move;
+    {
+        if(mKeyboard->isKeyDown(OIS::KC_LSHIFT))
+        {
+            cameraNode->roll(Ogre::Degree(-5 * cameraRollWeight));            
+        }
+        else
+        {
+            dirVec.y -= move;            
+        }
+    }
 
+    
+    // Camera left/right/yaw controls.
     if(mKeyboard->isKeyDown(OIS::KC_A))
     {
         if(mKeyboard->isKeyDown(OIS::KC_LSHIFT))
-            cameraNode->yaw(Ogre::Degree(5 * rotate));
+        {
+            cameraNode->yaw(Ogre::Degree(5 * cameraYawWeight));            
+        }
         else
-            dirVec.x -= move;
+        {
+            dirVec.x -= move;            
+        }
     }
-
     if(mKeyboard->isKeyDown(OIS::KC_D))
     {
         if(mKeyboard->isKeyDown(OIS::KC_LSHIFT))
-            cameraNode->yaw(Ogre::Degree(-5 * rotate));
+        {
+            cameraNode->yaw(Ogre::Degree(-5 * cameraYawWeight));            
+        }
         else
-            dirVec.x += move;
+        {
+            dirVec.x += move;            
+        }
+    }
+
+    
+    // Camera forward/back/pitch controls.
+    if(mKeyboard->isKeyDown(OIS::KC_W))
+    {
+        if(mKeyboard->isKeyDown(OIS::KC_LSHIFT))
+        {
+            cameraNode->pitch(Ogre::Degree(5 * cameraPitchWeight));            
+        }
+        else
+        {
+            dirVec.z -= move;            
+        }
+    }
+    if(mKeyboard->isKeyDown(OIS::KC_S))
+    {
+        if(mKeyboard->isKeyDown(OIS::KC_LSHIFT))
+        {
+            cameraNode->pitch(Ogre::Degree(-5 * cameraPitchWeight));            
+        }
+        else
+        {
+            dirVec.z += move;            
+        }
     }
 
     cameraNode->translate(dirVec * fe.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
@@ -130,68 +178,90 @@ void As3::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe)
 {
     keyboardTimer -= fe.timeSinceLastEvent;
 
+    // Entity speed controls.
     if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD8))
     {
         keyboardTimer = keyTime;
-        
-        entityMgr->selectedEntity->desiredSpeed += entityMgr->selectedEntity->acceleration;
-        
+
+        entityMgr->selectedEntity->desiredSpeed +=
+                entityMgr->selectedEntity->acceleration;
+
         // Keep speed within min and max speeds.
-        if(entityMgr->selectedEntity->desiredSpeed > entityMgr->selectedEntity->maxSpeed)
+        if(entityMgr->selectedEntity->desiredSpeed
+                > entityMgr->selectedEntity->maxSpeed)
         {
-            entityMgr->selectedEntity->desiredSpeed = entityMgr->selectedEntity->maxSpeed;
+            entityMgr->selectedEntity->desiredSpeed =
+                    entityMgr->selectedEntity->maxSpeed;
         }
     }
     if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD2))
     {
         keyboardTimer = keyTime;
-        
-        entityMgr->selectedEntity->desiredSpeed -= entityMgr->selectedEntity->acceleration;
-        
+
+        entityMgr->selectedEntity->desiredSpeed -=
+                entityMgr->selectedEntity->acceleration;
+
         // Keep speed within min and max speeds.
-        if(entityMgr->selectedEntity->desiredSpeed < entityMgr->selectedEntity->minSpeed)
+        if(entityMgr->selectedEntity->desiredSpeed
+                < entityMgr->selectedEntity->minSpeed)
         {
-            entityMgr->selectedEntity->desiredSpeed = entityMgr->selectedEntity->minSpeed;
+            entityMgr->selectedEntity->desiredSpeed =
+                    entityMgr->selectedEntity->minSpeed;
         }
     }
+    
+    
+    // Entity heading controls.
     if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD6))
     {
         keyboardTimer = keyTime;
-        
-        entityMgr->selectedEntity->desiredHeading -= entityMgr->selectedEntity->turningRate;
-        
-        // Keep heading within 0 to 360 degrees.
-        if(entityMgr->selectedEntity->desiredHeading < 0)
-        {
-            entityMgr->selectedEntity->desiredHeading = 360 - Ogre::Math::Abs(entityMgr->selectedEntity->desiredHeading);
-        }
+
+        entityMgr->selectedEntity->desiredHeading -=
+                entityMgr->selectedEntity->turningRate;
     }
     if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_NUMPAD4))
     {
         keyboardTimer = keyTime;
 
-        entityMgr->selectedEntity->desiredHeading += entityMgr->selectedEntity->turningRate;
-        
-        // Keep heading within 0 to 360 degrees.
-        if(entityMgr->selectedEntity->desiredHeading > 360)
-        {
-            entityMgr->selectedEntity->desiredHeading = entityMgr->selectedEntity->desiredHeading - 360;
-        }
+        entityMgr->selectedEntity->desiredHeading +=
+                entityMgr->selectedEntity->turningRate;
     }
 
+    
+    // Entity stop controls.
     if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_SPACE))
     {
         keyboardTimer = keyTime;
-        
+
         // Reduce speed to min speed.
-        entityMgr->selectedEntity->desiredSpeed = entityMgr->selectedEntity->minSpeed;
+        entityMgr->selectedEntity->desiredSpeed =
+                entityMgr->selectedEntity->minSpeed;
     }
 
-    if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_TAB))
+    
+    // Entity selection controls.
+    if(tabAvailable == true && (keyboardTimer < 0)
+            && mKeyboard->isKeyDown(OIS::KC_TAB))
     {
+        tabAvailable = false;
         keyboardTimer = keyTime;
         entityMgr->SelectNextEntity();
     }
+}
+
+// Keyboard Key Released
+bool As3::keyReleased(const OIS::KeyEvent& ke)
+{
+    switch(ke.key)
+    {
+    case OIS::KC_TAB:
+        tabAvailable = true;
+        break;
+    default:
+        break;
+    }
+
+    return true;
 }
 
 void As3::MakeGround()
