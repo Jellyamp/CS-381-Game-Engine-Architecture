@@ -13,15 +13,9 @@
 const float As3::keyTime = 0.05f;
 
 As3::As3(void)
+        : cameraYawWeight(0.04f), cameraPitchWeight(0.04f), cameraRollWeight(0.04f), keyboardTimer(keyTime),
+          cameraNode(0), entityMgr(0), surfaceHeight(0), tabAvailable(true)
 {
-    cameraYawWeight = 0.04f;
-    cameraPitchWeight = 0.04f;
-    cameraRollWeight = 0.04f;
-    keyboardTimer = keyTime;
-    cameraNode = 0;
-    entityMgr = 0;
-    surfaceHeight = 0;
-    tabAvailable = true;
 }
 
 As3::~As3(void)
@@ -236,6 +230,10 @@ void As3::UpdateVelocityAndSelection(const Ogre::FrameEvent& fe)
         // Reduce speed to min speed.
         entityMgr->selectedEntity->desiredSpeed =
                 entityMgr->selectedEntity->minSpeed;
+        
+        // Stop turning.
+        entityMgr->selectedEntity->desiredHeading =
+                entityMgr->selectedEntity->heading;
     }
 
     
@@ -277,10 +275,7 @@ void As3::MakeGround()
     mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(
             groundEntity);
     groundEntity->setCastShadows(false);
-    //groundEntity->setMaterialName("Ocean2_HLSL_GLSL");
-    //groundEntity->setMaterialName("OceanHLSL_GLSL");
     groundEntity->setMaterialName("Ocean2_Cg");
-    //groundEntity->setMaterialName("NavyCg");
 }
 
 void As3::MakeSky()

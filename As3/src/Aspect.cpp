@@ -60,33 +60,14 @@ void Physics::Tick(float dt)
     
     if(entity->heading < entity->desiredHeading)
     {
-        entity->heading += entity->turningRate;
+        entity->turningPort = true;
+        entity->turningStarboard = false;
     }
     else if(entity->heading > entity->desiredHeading)
     {
-        entity->heading -= entity->turningRate;
+        entity->turningPort = false;
+        entity->turningStarboard = true;
     }
-    
-    /*
-    if(entity->heading < entity->desiredHeading)
-    {
-        entity->heading += entity->turningRate;
-        
-        if(entity->heading > 360)
-        {
-            entity->heading = entity->heading - 360;
-        }
-    }
-    else if(entity->heading > entity->desiredHeading)
-    {
-        entity->heading -= entity->turningRate;
-        
-        if(entity->heading < 0)
-        {
-            entity->heading = 360 - Ogre::Math::Abs(entity->heading);
-        }
-    }
-    */
     
     entity->velocity.z = entity->speed * -1.0f * Ogre::Math::Sin(Ogre::Math::DegreesToRadians(entity->heading));
     entity->velocity.x = entity->speed * Ogre::Math::Cos(Ogre::Math::DegreesToRadians(entity->heading));
@@ -110,8 +91,18 @@ Renderable::~Renderable()
 void Renderable::Tick(float dt)
 {
     entity->sceneNode->setPosition(entity->position);
-    entity->sceneNode->yaw(Ogre::Radian(Ogre::Degree(entity->heading - entity->previousHeading)));
-    entity->previousHeading = entity->heading;
+    if(entity->turningPort)
+    {
+        entity->sceneNode->yaw(Ogre::Radian(Ogre::Degree(entity->turningRate * dt)));
+        entity->heading += entity->turningRate * dt;
+    }
+    else if(entity->turningStarboard)
+    {
+        entity->sceneNode->yaw(Ogre::Radian(Ogre::Degree(-1 * entity->turningRate * dt)));
+        entity->heading -= entity->turningRate * dt;
+    }
+    //entity->sceneNode->yaw(Ogre::Radian(Ogre::Degree((entity->heading - entity->previousHeading) * dt)));
+    //entity->previousHeading = entity->heading;
     
     if(entity->isSelected)
     {

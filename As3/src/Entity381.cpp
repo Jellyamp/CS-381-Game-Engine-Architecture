@@ -20,6 +20,8 @@ Entity381::Entity381(Ogre::SceneManager* sceneMgr, std::string meshfname,
 {
 
     isSelected = false;
+    turningPort = false;
+    turningStarboard = false;
 
     identity = ident;
 

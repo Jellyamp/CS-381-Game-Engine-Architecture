@@ -69,7 +69,7 @@ bool BaseApplication::configure(void)
     {
         // If returned true, user clicked OK so initialise.
         // Here we choose to let the system create a default rendering window by passing 'true'.
-        mWindow = mRoot->initialise(true, "CS381 - Assignment One");
+        mWindow = mRoot->initialise(true, "CS381 - Assignment Three");
 
         return true;
     }

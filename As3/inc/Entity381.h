@@ -22,6 +22,8 @@ public:
     virtual ~Entity381();
 
     bool isSelected;
+    bool turningPort;
+    bool turningStarboard;
 
     int identity;
 
