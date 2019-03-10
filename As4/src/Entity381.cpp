@@ -15,7 +15,7 @@ std::string IntToString(int x){
 	return std::string(tmp);
 }
 
-Entity381::Entity381(Ogre::SceneManager* sceneMgr, std::string meshfname, Ogre::Vector3 pos, int ident){
+Entity381::Entity381(Engine* engine, std::string meshfname, Ogre::Vector3 pos, int ident){
 
 	meshfilename = meshfname;
 	position = pos;
@@ -53,7 +53,7 @@ void Entity381::Tick(float dt){
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------
-DDG51::DDG51(Ogre::SceneManager * sm, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(sm, meshfname, pos, ident){
+DDG51::DDG51(Engine* engine, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(engine, meshfname, pos, ident){
 	this->minSpeed = 0;
 	this->maxSpeed = 16.0f;//meters per second...
 	this->acceleration = 5.0f; // fast
@@ -65,7 +65,7 @@ DDG51::~DDG51(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------
-Carrier::Carrier(Ogre::SceneManager * sm, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(sm, meshfname, pos, ident){
+Carrier::Carrier(Engine* engine, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(engine, meshfname, pos, ident){
 	this->minSpeed = 0;
 	this->maxSpeed = 20.0f;//meters per second...
 	this->acceleration = 1.0f; // slow
@@ -77,7 +77,7 @@ Carrier::~Carrier(){
 }
 //-------------------------------------------------------------------------------------------------------------------------------
 
-SpeedBoat::SpeedBoat(Ogre::SceneManager * sm, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(sm, meshfname, pos, ident){
+SpeedBoat::SpeedBoat(Engine* engine, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(engine, meshfname, pos, ident){
 	this->minSpeed = 0;
 	this->maxSpeed = 30.0f;//meters per second...
 	this->acceleration = 5.0f; // slow
@@ -89,7 +89,7 @@ SpeedBoat::~SpeedBoat(){
 }
 //-------------------------------------------------------------------------------------------------------------------------------
 
-Frigate::Frigate(Ogre::SceneManager * sm, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(sm, meshfname, pos, ident){
+Frigate::Frigate(Engine* engine, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(engine, meshfname, pos, ident){
 	this->minSpeed = 0;
 	this->maxSpeed = 15.0f;//meters per second...
 	this->acceleration = 5.0f; // slow
@@ -101,7 +101,7 @@ Frigate::~Frigate(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------
-Alien::Alien(Ogre::SceneManager * sm, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(sm, meshfname, pos, ident){
+Alien::Alien(Engine* engine, std::string meshfname, Ogre::Vector3 pos, int ident):Entity381(engine, meshfname, pos, ident){
 	this->minSpeed = 0;
 	this->maxSpeed = 50.0f;//meters per second...
 	this->acceleration = 10.0f; // slow

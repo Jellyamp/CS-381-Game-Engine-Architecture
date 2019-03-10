@@ -2,37 +2,44 @@
 #define __EntityMgr_h_
 
 #include <vector>
+#include <iterator>
 
-#include <Entity381.h>
-#include <Types381.h>
+#include "Mgr.h"
+#include "Engine.h"
+#include "GfxMgr.h"
+#include "GameMgr.h"
+#include "InputMgr.h"
+#include "Entity381.h"
+#include "Types381.h"
 
-class EntityMgr
+class EntityMgr : public Mgr
 {
 public:
-  EntityMgr(Ogre::SceneManager* sm);
-  virtual ~EntityMgr();
+    EntityMgr(Engine *engine);
+    virtual ~EntityMgr();
 
-  std::vector<Entity381*> entities;
-  Entity381* selectedEntity;
-  int selectedEntityIndex;
-  Ogre::SceneManager *sceneMgr;
+    void Init();
+    void LoadLevel();
+    void Tick(float dt);
+    void Stop();
 
-  void CreateEntityOfTypeAtPosition(EntityTypes type, Ogre::Vector3 pos);
-  void SelectNextEntity();
+    std::vector<Entity381*> entities;
+    Entity381* selectedEntity;
+    int selectedEntityIndex;
 
-  void Tick(float dt);
+    void CreateEntityOfTypeAtPosition(EntityTypes type, Ogre::Vector3 pos);
+    void SelectNextEntity();
 
 protected:
 
 private:
-  void CreateEntity(std::string meshfilename, Ogre::Vector3 pos);
-  void CreateDDG51(Ogre::Vector3 pos);
-  void CreateCarrier(Ogre::Vector3 pos);
-  void CreateSpeedBoat(Ogre::Vector3 pos);
-  void CreateFrigate(Ogre::Vector3 pos);
-  void CreateAlien(Ogre::Vector3 pos);
-  int count;
-
+    void CreateEntity(std::string meshfilename, Ogre::Vector3 pos);
+    void CreateDDG51(Ogre::Vector3 pos);
+    void CreateCarrier(Ogre::Vector3 pos);
+    void CreateSpeedBoat(Ogre::Vector3 pos);
+    void CreateFrigate(Ogre::Vector3 pos);
+    void CreateAlien(Ogre::Vector3 pos);
+    int count;
 };
 
 #endif // #ifndef __EntityMgr_h_
