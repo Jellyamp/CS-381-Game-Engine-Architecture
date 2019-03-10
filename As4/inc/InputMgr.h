@@ -54,6 +54,7 @@
 #include "GfxMgr.h"
 #include "GameMgr.h"
 #include "EntityMgr.h"
+#include "Utils.h"
 
 class InputMgr : public Mgr, public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
 {
@@ -81,6 +82,10 @@ public:
     
 private:
     void AttachCamera();
+    void CreateFrameListener();
+    bool frameRenderingQueued(const Ogre::FrameEvent& fe);
+    void UpdateCamera(const Ogre::FrameEvent& fe);
+    void UpdateVelocityAndSelection(const Ogre::FrameEvent& fe);
     
     // OgreBites
     OgreBites::InputContext     mInputContext;
@@ -88,12 +93,14 @@ private:
     OgreBites::SdkCameraMan*    mCameraMan;         // Basic camera controller
     OgreBites::ParamsPanel*     mDetailsPanel;      // Sample details panel
     bool                        mCursorWasVisible;  // Was cursor visible before dialog appeared?
-    bool                        mShutDown;
 
     //OIS Input devices
     OIS::InputManager*          mInputManager;
     OIS::Mouse*                 mMouse;
     OIS::Keyboard*              mKeyboard;
+    
+    float keyboardTimer;
+    const static float keyTime;
 };
 
 

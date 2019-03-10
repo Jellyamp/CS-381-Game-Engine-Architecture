@@ -6,6 +6,10 @@
 #include <OgreVector3.h>
 
 #include "Engine.h"
+#include "EntityMgr.h"
+#include "GameMgr.h"
+#include "GfxMgr.h"
+#include "InputMgr.h"
 #include "Aspect.h" //Entity381 includes Aspect.h, this is circular! A no-no
 
 class Entity381

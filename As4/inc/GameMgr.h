@@ -25,13 +25,22 @@ public:
     void Tick(float dt);
     void Stop();
     
+    Ogre::SceneNode* GetCameraNode();
+    float GetDeltaDesiredSpeed();
+    float GetDeltaDesiredHeading();
+    
 private:
+    void DestroyScene();
     void MakeEnts();
+    void MakeLight(Ogre::Vector3 pos, Ogre::String name);
+    void MakeCamera(Ogre::Vector3 pos);
     void MakeGround();
-    void MakeSky();
+    void MakeSky(Ogre::String skyBoxName);
     void MakeFog();
     
     Ogre::SceneNode* mCameraNode;
+    float mDeltaDesiredSpeed; // user changes desired speed by this much
+    float mDeltaDesiredHeading; //user changes desired heading by this much
 };
 
 

@@ -34,12 +34,19 @@ public:
     void Tick(float dt);
     void Stop();
     
+    Ogre::Root* GetRoot();
     Ogre::SceneManager* GetSceneMgr();
     Ogre::Camera* GetCamera();
     Ogre::RenderWindow* GetWindow();
     
 private:
-    void CreateCamera(void);
+    void SetupResources();
+    bool Configure();
+    void ChooseSceneManager();
+    void CreateCamera();
+    void CreateViewports();
+    void CreateResourceListener();
+    void LoadResources();
     
     Ogre::Root*                 mRoot;
     Ogre::Camera*               mCamera;
@@ -47,6 +54,8 @@ private:
     Ogre::RenderWindow*         mWindow;
     Ogre::String                mResourcesCfg;
     Ogre::String                mPluginsCfg;
+    
+    Ogre::OverlaySystem*        mOverlaySystem;
     
     // Added for Mac compatibility
     Ogre::String                mResourcePath;

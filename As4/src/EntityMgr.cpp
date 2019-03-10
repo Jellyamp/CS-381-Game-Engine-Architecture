@@ -13,7 +13,6 @@ EntityMgr::EntityMgr(Engine *engine)
     selectedEntity = 0;
     count = 0;
     selectedEntityIndex = -1;
-    sceneMgr = NULL;
 }
 
 EntityMgr::~EntityMgr()
@@ -32,8 +31,7 @@ void EntityMgr::LoadLevel()
 }
 
 void EntityMgr::Tick(float dt)
-{  //Someone needs to call this tick...
-//we have not hooked everything up...
+{
     for(int i = 0; i < count; i++)
     {
         entities[i]->Tick(dt);
@@ -42,11 +40,12 @@ void EntityMgr::Tick(float dt)
 
 void EntityMgr::Stop()
 {
-    for(std::vector<Entity381*>::iterator entIter = entities.begin();
-            entIter != entities.end(); entIter++)
+    for(std::vector<Entity381*>::iterator entIter = entities.begin(); entIter != entities.end(); entIter++)
     {
         delete *entIter;
     }
+
+    entities.clear();
 }
 
 void EntityMgr::CreateEntity(std::string meshfilename, Ogre::Vector3 pos)
@@ -106,8 +105,7 @@ void EntityMgr::SelectNextEntity()
 
 }
 
-void EntityMgr::CreateEntityOfTypeAtPosition(EntityTypes entType,
-        Ogre::Vector3 pos)
+void EntityMgr::CreateEntityOfTypeAtPosition(EntityTypes entType, Ogre::Vector3 pos)
 {
 
     switch(entType)

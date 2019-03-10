@@ -4,6 +4,8 @@
 #include <vector>
 #include <iterator>
 
+class Entity381;
+
 #include "Mgr.h"
 #include "Engine.h"
 #include "GfxMgr.h"
