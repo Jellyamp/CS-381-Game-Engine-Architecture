@@ -48,7 +48,7 @@ public:
 
 	float keyboardTimer;
 	const static float keyTime;
-	float deltaDesiredSpeed, deltaDesiredHeading;
+	float deltaDesiredSpeed, deltaDesiredHeading, deltaDesiredAltitude;
 	void UpdateCamera(float dt);
 	void UpdateVelocityAndSelection(float dt);
 

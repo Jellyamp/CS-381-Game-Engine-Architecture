@@ -22,16 +22,16 @@ public:
   std::string meshfilename;
   Ogre::SceneNode* sceneNode;
   Ogre::Entity*    ogreEntity;
-  float acceleration, turnRate;
-  float minSpeed, maxSpeed;
+  float acceleration, turnRate, climbRate;
+  float minSpeed, maxSpeed, minAltitude, maxAltitude;
 
   //dynamic data
   Ogre::Vector3 position;
   Ogre::Vector3 velocity;
-  bool isSelected;
-  float desiredHeading, desiredSpeed;
-  float heading, speed;
-
+  bool isSelected, canFly;
+  float desiredHeading, desiredSpeed, desiredAltitude;
+  float heading, speed, altitude;
+  
   std::vector<Aspect* > aspects;
 
   void Tick(float dt);
@@ -39,6 +39,14 @@ public:
 protected:
 
 
+};
+
+
+class Banshee : Entity381
+{
+public:
+    Banshee(Engine *engine, std::string meshfilename, Ogre::Vector3 pos, int identity);
+    virtual ~Banshee();
 };
 
 class Carrier: Entity381 {

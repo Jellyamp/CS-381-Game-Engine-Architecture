@@ -9,6 +9,7 @@
 
 #include<Entity381.h>
 #include<Physics2D.h>
+#include<PhysicsFlight.h>
 
 std::string IntToString(int x){
 	char tmp[10000];
@@ -26,6 +27,7 @@ Entity381::Entity381(Engine *engine, std::string meshfname, Ogre::Vector3 pos, i
 	velocity = Ogre::Vector3(0, 0, 0);
 	identity = ident;
 	isSelected = false;
+	canFly = false;
 
 	name = meshfname + IntToString(identity);
 
@@ -41,8 +43,11 @@ Entity381::Entity381(Engine *engine, std::string meshfname, Ogre::Vector3 pos, i
 	this->acceleration = 0;
 	this->desiredHeading = this->heading = 0;
 	this->turnRate = 0;
+	this->climbRate = 0;
 	this->desiredSpeed = this->speed = 0;
 	this->minSpeed = this->maxSpeed = 0;
+	this->minAltitude = this->maxAltitude = 0;
+	this->desiredAltitude = this->altitude = pos.y;
 
 }
 
@@ -54,6 +59,29 @@ void Entity381::Tick(float dt){
 	for(unsigned int i = 0; i < aspects.size(); i++){
 		aspects[i]->Tick(dt);
 	}
+}
+
+
+//-------------------------------------------------------------------------------------------------------------------------------
+Banshee::Banshee(Engine *engine, std::string meshfname, Ogre::Vector3 pos, int ident):
+        Entity381(engine, meshfname, pos, ident){
+    this->minSpeed = 0;
+    this->maxSpeed = 16.0f;//meters per second...
+    this->minAltitude = 0;
+    this->maxAltitude = 100000;
+    this->acceleration = 5.0f; // fast
+    this->turnRate = 40.0f; //8 degrees per second
+    this->climbRate = 10.0f;
+    this->canFly = true;
+    
+    PhysicsFlight* phxFlight = new PhysicsFlight(this);
+    aspects.push_back((Aspect*) phxFlight);
+    
+    std::cout << "Created: " << this->name << std::endl;
+}
+
+Banshee::~Banshee(){
+
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------

@@ -52,7 +52,7 @@ void EntityMgr::CreateAlien(Ogre::Vector3 pos){
 	entities.push_back((Entity381 *) ent);
 }
 void EntityMgr::CreateBanshee(Ogre::Vector3 pos){
-    Alien *ent = new Alien(this->engine, "banshee.mesh", pos, count);
+    Banshee *ent = new Banshee(this->engine, "banshee.mesh", pos, count);
     count++;
     entities.push_back((Entity381 *) ent);
 }

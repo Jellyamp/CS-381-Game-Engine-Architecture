@@ -23,6 +23,7 @@ InputMgr::InputMgr(Engine *engine) : Mgr(engine) {
 	this->keyboardTimer = keyTime;
 	deltaDesiredSpeed = 10.0f;
 	deltaDesiredHeading = 10.0f;
+	deltaDesiredAltitude = 10.0f;
 }
 
 InputMgr::~InputMgr() {
@@ -150,6 +151,19 @@ void InputMgr::UpdateVelocityAndSelection(float dt){
 	}
 	engine->entityMgr->selectedEntity->desiredHeading = FixAngle(engine->entityMgr->selectedEntity->desiredHeading);
 
+	if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_PGUP))
+	{
+	    keyboardTimer = keyTime;
+        std::cout << "up" << std::endl;
+	    engine->entityMgr->selectedEntity->desiredAltitude += deltaDesiredAltitude;
+	}
+	if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_PGDOWN))
+    {
+        keyboardTimer = keyTime;
+        std::cout << "down" << std::endl;
+        engine->entityMgr->selectedEntity->desiredAltitude -= deltaDesiredAltitude;
+    }
+	
 	//Set velocity to zero....
 	if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_SPACE)){
 		keyboardTimer = keyTime;
