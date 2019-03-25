@@ -105,6 +105,8 @@ void EntityMgr::SelectNextEntity()
 
 }
 
+
+
 void EntityMgr::CreateEntityOfTypeAtPosition(EntityTypes entType, Ogre::Vector3 pos)
 {
 

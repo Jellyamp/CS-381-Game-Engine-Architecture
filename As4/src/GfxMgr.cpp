@@ -94,7 +94,10 @@ void GfxMgr::Stop()
 
 void GfxMgr::Tick(float dt)
 {
-    mRoot->renderOneFrame();
+    if(!mRoot->renderOneFrame())
+    {
+        engine->keepRunning = false;
+    }
 }
 
 
