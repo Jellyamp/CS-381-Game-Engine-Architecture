@@ -7,6 +7,7 @@
 
 #include <EntityMgr.h>
 #include <Engine.h>
+#include "GameMgr.h"
 
 EntityMgr::EntityMgr(Engine *eng): Mgr(eng){
 	selectedEntity = 0;
@@ -70,38 +71,64 @@ void EntityMgr::SelectNextEntity(){
 	selectedEntity->isSelected = true;
 }
 
-void EntityMgr::SelectEntity(Ogre::SceneNode* newEnt)
+void EntityMgr::SelectEntityByAABB(Ogre::Ray& rayToCheck)
 {
     int newIndex = -1;
-    if(newEnt != NULL)
+    std::pair<bool, Ogre::Real> result;
+    
+    for(std::vector<Entity381*>::iterator iter = entities.begin(); iter != entities.end(); iter++)
     {
+        result = rayToCheck.intersects((*iter)->sceneNode->_getWorldAABB());
+        if(result.first == true)
+        {
+            newIndex = iter - entities.begin();
+        }
+    }
+    
+    SetSelection(newIndex);
+}
+
+void EntityMgr::SelectEntityByDistanceToPoint(Ogre::Ray& rayToCheck)
+{
+    int newIndex = -1;
+    std::pair<bool, Ogre::Real> result;
+    result = rayToCheck.intersects(engine->gameMgr->plane);
+    Ogre::Vector3 intersectPos;
+    float minDistance = std::numeric_limits<float>::infinity();
+    float currentDistance = 0;
+    
+    if(result.first)
+    {
+        intersectPos = rayToCheck.getPoint(result.second);
         for(std::vector<Entity381*>::iterator iter = entities.begin(); iter != entities.end(); iter++)
         {
-            if((*iter)->sceneNode == newEnt)
+            currentDistance = Ogre::Vector3((*iter)->position - intersectPos).length();
+            if(currentDistance < minDistance)
             {
+                minDistance = currentDistance;
                 newIndex = iter - entities.begin();
             }
         }
-        if(newIndex == -1)
-        {
-            std::cerr << "ERROR: Selected entity not part of entity list" << std::endl;
-        }
-        else
-        {
-            if(selectedEntity != NULL)
-            {
-                selectedEntity->isSelected = false;
-            }
-            std::cout << entities.size() << std::endl;
-            selectedEntityIndex = newIndex;
-            std::cout << selectedEntityIndex << std::endl;
-            selectedEntity = entities[selectedEntityIndex];
-            selectedEntity->isSelected = true;
-        }
+    }
+    
+    SetSelection(newIndex);
+}
+
+void EntityMgr::SetSelection(int newIndex)
+{
+    if(newIndex == -1)
+    {
+        std::cerr << "ERROR: Entity not found" << std::endl;
     }
     else
     {
-        std::cerr << "ERROR: Null pointer given to EntityMgr::SelectEntity" << std::endl;
+        if(selectedEntity != NULL)
+        {
+            selectedEntity->isSelected = false;
+        }
+        selectedEntityIndex = newIndex;
+        selectedEntity = entities[selectedEntityIndex];
+        selectedEntity->isSelected = true;
     }
 }
 

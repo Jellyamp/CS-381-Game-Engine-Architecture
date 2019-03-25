@@ -23,6 +23,7 @@ public:
 	void MakeEntities();
 
 	Ogre::SceneNode *cameraNode;
+    Ogre::Plane plane;
 
 };
 

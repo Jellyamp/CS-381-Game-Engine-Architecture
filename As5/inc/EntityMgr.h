@@ -6,6 +6,7 @@
 #include <Mgr.h>
 #include <Entity381.h>
 #include <Types381.h>
+#include <limits>
 
 class EntityMgr: public Mgr {
 public:
@@ -23,7 +24,9 @@ public:
 
   void CreateEntityOfTypeAtPosition(EntityTypes type, Ogre::Vector3 pos);
   void SelectNextEntity();
-  void SelectEntity(Ogre::SceneNode* newEnt);
+  void SelectEntityByAABB(Ogre::Ray& rayToCheck);
+  void SelectEntityByDistanceToPoint(Ogre::Ray& rayToCheck);
+  void SetSelection(int newIndex);
 
   void Tick(float dt);
 

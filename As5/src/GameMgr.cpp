@@ -19,7 +19,8 @@
 #include <OgreMeshManager.h>
 
 
-GameMgr::GameMgr(Engine *engine): Mgr(engine) {
+GameMgr::GameMgr(Engine *engine): Mgr(engine), plane(Ogre::Vector3::UNIT_Y, 0)
+{
 	cameraNode = 0;
 }
 
@@ -75,9 +76,6 @@ void GameMgr::MakeEntities(){
 }
 
 void GameMgr::MakeGround(){
-
-	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-
 	  Ogre::MeshManager::getSingleton().createPlane(
 	    "ground",
 	    Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,

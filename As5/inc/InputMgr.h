@@ -49,6 +49,7 @@ public:
 	float keyboardTimer;
 	const static float keyTime;
 	float deltaDesiredSpeed, deltaDesiredHeading, deltaDesiredAltitude;
+	bool mouseSelectionMode; // False for AABB, True for Distance.
 	void UpdateCamera(float dt);
 	void UpdateVelocityAndSelection(float dt);
 

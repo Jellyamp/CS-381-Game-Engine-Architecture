@@ -24,6 +24,7 @@ InputMgr::InputMgr(Engine *engine) : Mgr(engine) {
 	deltaDesiredSpeed = 10.0f;
 	deltaDesiredHeading = 10.0f;
 	deltaDesiredAltitude = 10.0f;
+	mouseSelectionMode = true;
 }
 
 InputMgr::~InputMgr() {
@@ -172,6 +173,14 @@ void InputMgr::UpdateVelocityAndSelection(float dt){
 		engine->entityMgr->selectedEntity->desiredHeading = engine->entityMgr->selectedEntity->heading;
 	}
 
+	// Flip between mouse selection options.
+	if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_H))
+	{
+	    keyboardTimer = keyTime;
+	    mouseSelectionMode = !mouseSelectionMode;
+	    mouseSelectionMode ? std::cout << "Distance Selection" << std::endl : std::cout << "AABB Selection" << std::endl;
+	}
+	
 	//tab handling
 	if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_TAB)){
 		keyboardTimer = keyTime;
@@ -209,15 +218,13 @@ bool InputMgr::mousePressed(const OIS::MouseEvent& me, OIS::MouseButtonID mid){
         ray = engine->gfxMgr->mCamera->getCameraToViewportRay(me.state.X.abs / (float)vp->getActualWidth(),
                                                               me.state.Y.abs / (float)vp->getActualHeight());
         
-        for(std::vector<Entity381*>::iterator iter = entityMgrRef->entities.begin(); iter != entityMgrRef->entities.end(); iter++)
+        if(mouseSelectionMode) // Distance Selection
         {
-            currentSceneNode = (*iter)->sceneNode;
-            result = ray.intersects(currentSceneNode->_getWorldAABB());
-            if(result.first == true && result.second <= maxDist)
-            {
-                entityMgrRef->SelectEntity(currentSceneNode);
-                iter = entityMgrRef->entities.end() - 1;
-            }
+            entityMgrRef->SelectEntityByDistanceToPoint(ray);
+        }
+        else if(!mouseSelectionMode) // AABB Selection
+        {
+            entityMgrRef->SelectEntityByAABB(ray);
         }
     }
 	return true;
