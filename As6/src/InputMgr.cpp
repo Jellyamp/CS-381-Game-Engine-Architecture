@@ -11,6 +11,8 @@
 #include <InputMgr.h>
 #include <EntityMgr.h>
 #include <GameMgr.h>
+#include <UnitAI.h>
+#include <Command.h>
 
 #include <Utils.h>
 
@@ -27,6 +29,8 @@ InputMgr::InputMgr(Engine *engine) : Mgr(engine), OIS::KeyListener(), OIS::Mouse
 	deltaDesiredAltitude = 20;
 	this->selectionDistanceSquaredThreshold = std::numeric_limits<float>::infinity();
 	this->mouseMode = true;
+	this->interceptMode = true;
+	this->lShiftDown = false;
 }
 
 InputMgr::~InputMgr() {
@@ -103,6 +107,11 @@ void InputMgr::Tick(float dt){
 void InputMgr::UpdateCamera(float dt){
     float move = 400.0f;
 	float rotate = 0.1f;
+    if(lShiftDown)
+    {
+        move *= 2;
+        rotate *= 2;
+    }
 	
 	keyboardTimer -= dt;
 
@@ -133,29 +142,47 @@ void InputMgr::UpdateCamera(float dt){
         if (mKeyboard->isKeyDown(OIS::KC_S))
             dirVec.z += move;
         
-        if (mKeyboard->isKeyDown(OIS::KC_E))
+        if (mKeyboard->isKeyDown(OIS::KC_R))
             dirVec.y += move;
         
         if (mKeyboard->isKeyDown(OIS::KC_F))
+        {
             dirVec.y -= move;
+        }
+        
         
         if (mKeyboard->isKeyDown(OIS::KC_A))
         {
-            if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
-                engine->gameMgr->cameraNode->yaw(Ogre::Degree(5 * rotate));
-            else
-                dirVec.x -= move;
+            dirVec.x -= move;
         }
-        
         if (mKeyboard->isKeyDown(OIS::KC_D))
         {
-            if (mKeyboard->isKeyDown(OIS::KC_LSHIFT))
-                engine->gameMgr->cameraNode->yaw(Ogre::Degree(-5 * rotate));
-            else
-                dirVec.x += move;
+            dirVec.x += move;
+        }
+        
+        if(mKeyboard->isKeyDown(OIS::KC_Q))
+        {
+            engine->gameMgr->cameraNode->yaw(Ogre::Degree(5 * rotate));
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_E))
+        {
+            engine->gameMgr->cameraNode->yaw(Ogre::Degree(-5 * rotate));
+        }
+        
+        if(mKeyboard->isKeyDown(OIS::KC_Z))
+        {
+            engine->gameMgr->cameraNode->pitch(Ogre::Degree(5 * rotate));
+        }
+        if(mKeyboard->isKeyDown(OIS::KC_X))
+        {
+            engine->gameMgr->cameraNode->pitch(Ogre::Degree(-5 * rotate));
         }
         
         engine->gameMgr->cameraNode->translate(dirVec * dt, Ogre::Node::TS_LOCAL);
+        if(engine->gameMgr->cameraNode->getPosition().y < engine->gfxMgr->oceanHeight)
+        {
+            engine->gameMgr->cameraNode->setPosition(engine->gameMgr->cameraNode->getPosition().x, 5, engine->gameMgr->cameraNode->getPosition().z);
+        }
     }
     
 }
@@ -227,6 +254,12 @@ void InputMgr::UpdateVelocityAndSelection(float dt){
 	    keyboardTimer = keyTime;
 	    mouseMode = !mouseMode;
 	}
+	
+    if((keyboardTimer < 0) && mKeyboard->isKeyDown(OIS::KC_I))
+    {
+        keyboardTimer = keyTime;
+        interceptMode = !interceptMode;
+    }
 }
 
 void InputMgr::LoadLevel(){
@@ -234,10 +267,18 @@ void InputMgr::LoadLevel(){
 }
 
 bool InputMgr::keyPressed(const OIS::KeyEvent& ke){
+    if(ke.key == OIS::KC_LSHIFT)
+    {
+        lShiftDown = true;
+    }
 	return true;
 }
 
 bool InputMgr::keyReleased(const OIS::KeyEvent& ke){
+    if(ke.key == OIS::KC_LSHIFT)
+    {
+        lShiftDown = false;
+    }
 	return true;
 }
 
@@ -250,6 +291,11 @@ bool InputMgr::mousePressed(const OIS::MouseEvent& me, OIS::MouseButtonID mid){
 	if(OIS::MB_Left == mid){
 		std::cout << "Left mouse press" << std::endl;
 		HandleMouseSelection(me);
+	}
+	if(OIS::MB_Right == mid)
+	{
+	    std::cout << "Right mouse press" << std::endl;
+	    HandleAI(me);
 	}
 
 	return true;
@@ -314,6 +360,83 @@ void InputMgr::HandleMouseSelection(const OIS::MouseEvent &me){
             engine->entityMgr->selectedEntity->cameraNode->attachObject(engine->gfxMgr->mCamera);
         }
 	}
+}
+
+
+
+
+void InputMgr::HandleAI(const OIS::MouseEvent &me){
+    const OIS::MouseState &ms = mMouse->getMouseState();
+    Ogre::Viewport* vp = engine->gfxMgr->mSceneMgr->getCurrentViewport();
+    Ogre::Ray mouseRay = engine->gfxMgr->mCamera->getCameraToViewportRay(ms.X.abs/(float)vp->getActualWidth(), ms.Y.abs/(float)vp->getActualHeight());
+    bool entityFound = false;
+    
+    Entity381* currentEntity = engine->entityMgr->selectedEntity;
+    
+    for(std::vector<Entity381*>::iterator iter = engine->entityMgr->entities.begin(); iter != engine->entityMgr->entities.end() && !entityFound; iter++)
+    {
+        std::pair<bool, float> result = mouseRay.intersects((*iter)->sceneNode->_getWorldAABB());
+        if(result.first == true)
+        {
+            entityFound = true;
+            Entity381* entity = *iter;
+            for(unsigned int i = 0; i < currentEntity->aspects.size(); i++)
+            {
+                if(currentEntity->aspects[i]->aspectType == UNIT_AI)
+                {
+                    if(interceptMode)
+                    {                        
+                        Intercept* newCommand = new Intercept(currentEntity, entity->position, entity);
+                        newCommand->init();
+                        if(lShiftDown)
+                        {
+                            ((UnitAI*)currentEntity->aspects[i])->AddCommand((Command*)newCommand);                        
+                        }
+                        else
+                        {
+                            ((UnitAI*)currentEntity->aspects[i])->SetCommand((Command*)newCommand);  
+                        }
+                    }
+                    else
+                    {
+                        Follow* newCommand = new Follow(currentEntity, entity->position, entity);
+                        newCommand->init();
+                        if(lShiftDown)
+                        {
+                            ((UnitAI*)currentEntity->aspects[i])->AddCommand((Command*)newCommand);                        
+                        }
+                        else
+                        {
+                            ((UnitAI*)currentEntity->aspects[i])->SetCommand((Command*)newCommand);  
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(!entityFound)
+    {
+        std::pair<bool, float> result = mouseRay.intersects(engine->gfxMgr->oceanSurface);
+        if(result.first){
+            Ogre::Vector3 posUnderMouse = mouseRay.getPoint(result.second);
+            for(unsigned int i = 0; i < currentEntity->aspects.size(); i++)
+            {
+                if(currentEntity->aspects[i]->aspectType == UNIT_AI)
+                {
+                    MoveTo* newCommand = new MoveTo(currentEntity, posUnderMouse, MOVE_TO);
+                    newCommand->init();
+                    if(lShiftDown)
+                    {
+                        ((UnitAI*)currentEntity->aspects[i])->AddCommand((Command*)newCommand);                        
+                    }
+                    else
+                    {
+                        ((UnitAI*)currentEntity->aspects[i])->SetCommand((Command*)newCommand);  
+                    }
+                }
+            }
+        }
+    }
 }
 
 

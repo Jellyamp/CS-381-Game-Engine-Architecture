@@ -13,7 +13,7 @@
 class Physics2D : Aspect
 {
 public:
-	Physics2D(Entity381 *ent);
+	Physics2D(Entity381 *ent, AspectType aType);
 	~Physics2D();
 
 	void Tick(float dt);

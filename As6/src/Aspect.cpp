@@ -9,8 +9,9 @@
 #include <Entity381.h>  //Aspect includes Entity381.h
 
 
-Aspect::Aspect(Entity381 *ent){
+Aspect::Aspect(Entity381 *ent, AspectType aType){
 	entity = ent;
+	aspectType = aType;
 }
 
 Aspect::~Aspect(){
@@ -24,7 +25,7 @@ void Aspect::Tick(float dt){
 
 
 
-Renderable::Renderable(Entity381* ent):Aspect(ent){
+Renderable::Renderable(Entity381* ent, AspectType aType):Aspect(ent, aType){
 
 }
 

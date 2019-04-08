@@ -30,6 +30,7 @@ GfxMgr::GfxMgr(Engine *engine): Mgr(engine) {
 	mSceneMgr = 0;
 	mCamera = 0;
 	firstPerson = false;
+	oceanHeight = 0;
 	//oceanSurface(Ogre::Vector3::UNIT_Y, 0);
 }
 
@@ -109,10 +110,10 @@ void GfxMgr::MakeSky(){
 void GfxMgr::MakeGround(){
 
 	//Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-	//Ogre::Plane oceanSurface(Ogre::Vector3::UNIT_Y, 0);
+	Ogre::Plane oceanSurface(Ogre::Vector3::UNIT_Y, 0);
 	//oceanSurface = plane;
 	oceanSurface.normal = Ogre::Vector3::UNIT_Y;
-	oceanSurface.d = 0;
+	oceanSurface.d = oceanHeight;
 	Ogre::MeshManager::getSingleton().createPlane(
 	    "ocean",
 	    Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,

@@ -13,7 +13,7 @@
 
 class Physics3D: public Physics2D {
 public:
-	Physics3D(FlyingEntity381* ent);
+	Physics3D(FlyingEntity381* ent, AspectType aspectType);
 	virtual ~Physics3D();
 
 	FlyingEntity381 *flyingEntity;

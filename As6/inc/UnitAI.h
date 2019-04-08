@@ -18,7 +18,7 @@ public:
 
 	std::list<Command*> commands;
 
-	UnitAI(Entity381* ent);
+	UnitAI(Entity381* ent, AspectType aspectType);
 	~UnitAI();
 
 	void Tick(float dt);

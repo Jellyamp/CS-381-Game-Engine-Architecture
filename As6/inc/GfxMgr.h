@@ -33,6 +33,7 @@ public:
 
 	void MakeGround();
 	Ogre::Plane oceanSurface;
+	float oceanHeight;
 	void MakeSky();
 
 	//Ogre related stuff

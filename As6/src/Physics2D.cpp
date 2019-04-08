@@ -10,7 +10,7 @@
 #include <Entity381.h>
 #include <Utils.h>
 
-Physics2D::Physics2D(Entity381* ent):Aspect(ent){
+Physics2D::Physics2D(Entity381* ent, AspectType aType):Aspect(ent, aType){
 
 }
 

@@ -17,8 +17,8 @@ FlyingEntity381::FlyingEntity381(Engine *engine, Ogre::Vector3 pos, int ident):
 	desiredAltitude = 0;
 	climbRate = 1;
 	aspects.clear();
-	Physics3D * phx = new Physics3D(this);
-	Renderable *renderable = new Renderable(this);
+	Physics3D * phx = new Physics3D(this, PHYSICS_3D);
+	Renderable *renderable = new Renderable(this, RENDERABLE);
 	aspects.push_back((Aspect *) phx);
 	aspects.push_back((Aspect *) renderable);
 }

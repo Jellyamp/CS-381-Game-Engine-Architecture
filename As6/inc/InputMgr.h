@@ -55,8 +55,11 @@ public:
 	void UpdateVelocityAndSelection(float dt);
 
 	void HandleMouseSelection(const OIS::MouseEvent& me);
+	void HandleAI(const OIS::MouseEvent& me);
 	float selectionDistanceSquaredThreshold;
 	bool mouseMode;
+	bool interceptMode;
+	bool lShiftDown;
 
 };
 

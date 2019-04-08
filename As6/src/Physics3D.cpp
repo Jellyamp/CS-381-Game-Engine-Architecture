@@ -9,7 +9,7 @@
 #include <Entity381.h>
 #include <Utils.h>
 
-Physics3D::Physics3D(FlyingEntity381 * ent): Physics2D((Entity381*) ent) {
+Physics3D::Physics3D(FlyingEntity381 * ent, AspectType aType): Physics2D((Entity381*) ent, aType) {
 	// TODO Auto-generated constructor stub
 	flyingEntity = ent;
 }
