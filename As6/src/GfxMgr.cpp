@@ -21,7 +21,7 @@
 #include <Engine.h>
 #include <GfxMgr.h>
 
-GfxMgr::GfxMgr(Engine *engine): Mgr(engine) {
+GfxMgr::GfxMgr(Engine *engine): Mgr(engine), oceanSurface(Ogre::Vector3::UNIT_Y, 0) {
 
 	mRoot = 0;
 	mResourcesCfg = Ogre::StringUtil::BLANK;
@@ -110,10 +110,10 @@ void GfxMgr::MakeSky(){
 void GfxMgr::MakeGround(){
 
 	//Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
-	Ogre::Plane oceanSurface(Ogre::Vector3::UNIT_Y, 0);
+	//oceanSurface(Ogre::Vector3::UNIT_Y, 0);
 	//oceanSurface = plane;
-	oceanSurface.normal = Ogre::Vector3::UNIT_Y;
-	oceanSurface.d = oceanHeight;
+	//oceanSurface.normal = Ogre::Vector3::UNIT_Y;
+	//oceanSurface.d = 0;
 	Ogre::MeshManager::getSingleton().createPlane(
 	    "ocean",
 	    Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,

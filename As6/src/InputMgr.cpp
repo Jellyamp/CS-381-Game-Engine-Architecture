@@ -418,6 +418,7 @@ void InputMgr::HandleAI(const OIS::MouseEvent &me){
     {
         std::pair<bool, float> result = mouseRay.intersects(engine->gfxMgr->oceanSurface);
         if(result.first){
+            std::cout << "Hello" << std::endl;
             Ogre::Vector3 posUnderMouse = mouseRay.getPoint(result.second);
             for(unsigned int i = 0; i < currentEntity->aspects.size(); i++)
             {
